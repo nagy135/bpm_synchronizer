@@ -2,11 +2,11 @@ FROM node:13.12.0-alpine as build
 
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
-COPY ./react/package.json ./
-COPY ./react/package-lock.json ./
+COPY ./app/package.json ./
+COPY ./app/package-lock.json ./
 RUN npm ci --silent
 RUN npm install react-scripts@3.4.1 -g --silent
-COPY ./react ./
+COPY ./app ./
 RUN npm run build
 
 # production environment

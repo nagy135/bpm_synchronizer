@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-    database:
+    db:
         image: "postgres"
         container_name: db
         env_file:
@@ -13,26 +13,22 @@ services:
         container_name: api
         restart: always
         build:
-          context: .
-          dockerfile: ./dockerfile/Dockerfile.api
-        environment:
-            - PORT=4000
-        ports:
-            - "4000:4000"
-        links:
+          context: ./api/
+          dockerfile: ../dockerfile/Dockerfile.api
+        depends_on:
             - database
         volumes:
-            - ./matinka-calendar-api/src:/usr/src/app/src
+            - ./testify-api:/var/www/app/
 
-    react:
-        container_name: react
+    app:
+        container_name: app
         build:
-          context: .
-          dockerfile: ./dockerfile/Dockerfile.react
+          context: ./app/
+          dockerfile: ../dockerfile/Dockerfile.react
         volumes:
-            - ./matinka-calendar-react/src:/app/src
-            - ./matinka-calendar-react/public:/app/public
-            - ./matinka-calendar-react/assets:/app/assets
+            - ./app/src:/app/src
+            - ./app/public:/app/public
+            - ./app/assets:/app/assets
         ports:
             - "3000:3000"
         stdin_open: true

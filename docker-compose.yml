@@ -6,7 +6,7 @@ services:
         env_file:
             - .env.postgres
         volumes:
-            - database-data:/var/lib/postgresql/data/
+            - db-data:/var/lib/postgresql/data/
         ports:
             - "5432:5432"
     api:
@@ -16,9 +16,9 @@ services:
           context: ./api/
           dockerfile: ../dockerfile/Dockerfile.api
         depends_on:
-            - database
+            - db
         volumes:
-            - ./testify-api:/var/www/app/
+            - ./api:/var/www/app/
 
     app:
         container_name: app
@@ -35,4 +35,4 @@ services:
         environment:
           - CHOKIDAR_USEPOLLING=true
 volumes:
-    database-data:
+    db-data:

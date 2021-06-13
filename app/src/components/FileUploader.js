@@ -2,6 +2,8 @@ import axios from 'axios';
 
 import React,{Component} from 'react';
 
+import constants from '../constants';
+
 class FileUploader extends Component {
 
     state = {
@@ -33,6 +35,7 @@ class FileUploader extends Component {
 
         // Details of the uploaded file
         console.log(this.state.selectedFile);
+        console.log(constants.apiEndpoint);
 
         // Request made to the backend api
         // Send formData object

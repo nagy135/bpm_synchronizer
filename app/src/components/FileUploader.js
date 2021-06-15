@@ -38,12 +38,21 @@ class FileUploader extends Component {
         console.log(constants.apiEndpoint);
 
         const ax = axios.create({
-            baseURL : constants.apiEndpoint
+            baseURL : constants.apiEndpoint,
+            headers: {
+                post: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }
         });
         // Request made to the backend api
         // Send formData object
-        ax.post("/upload", formData);
-        };
+        ax.post("/upload", []);
+        // ax.post("/upload", formData);
+        // };
+        // ax.get("/upload");
+    };
 
     // File content to be displayed after
     // file upload is complete

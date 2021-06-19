@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\SongController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,6 +20,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('upload', function (Request $request) {
-    return response()->json(['haha' => 'lol']);
-});
+Route::post('upload', [SongController::class, 'upload']);

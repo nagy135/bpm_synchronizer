@@ -28,9 +28,14 @@ class FileUploader extends Component {
 
         // Update the formData object
         formData.append(
-            "myFile",
+            "song",
             this.state.selectedFile,
             this.state.selectedFile.name
+            );
+
+        formData.append(
+            "name",
+            'testname'
             );
 
         // Details of the uploaded file
@@ -48,10 +53,7 @@ class FileUploader extends Component {
         });
         // Request made to the backend api
         // Send formData object
-        ax.post("/upload", []);
-        // ax.post("/upload", formData);
-        // };
-        // ax.get("/upload");
+        ax.post("/upload", formData);
     };
 
     // File content to be displayed after

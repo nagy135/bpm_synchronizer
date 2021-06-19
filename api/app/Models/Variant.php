@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Variant extends Model
 {
     use HasFactory;
+
+    // relations {{{
+
+    public function song(){
+        return $this->belongsTo(Song::class);
+    }
+
+    // }}}
 }

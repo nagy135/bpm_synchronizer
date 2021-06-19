@@ -9,6 +9,8 @@ class Song extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     // relations {{{
 
     public function variants(){

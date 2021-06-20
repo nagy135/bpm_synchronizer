@@ -20,4 +20,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('upload', [SongController::class, 'upload']);
+Route::group([
+    'prefix' => 'song'
+], function () {
+    Route::get('', [SongController::class, 'get']);
+    Route::post('upload', [SongController::class, 'upload']);
+});

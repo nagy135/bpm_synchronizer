@@ -53,7 +53,7 @@ class FileUploader extends Component {
         });
         // Request made to the backend api
         // Send formData object
-        ax.post("/upload", formData);
+        ax.post("/song/upload", formData);
     };
 
     // File content to be displayed after

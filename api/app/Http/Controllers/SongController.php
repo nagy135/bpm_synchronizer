@@ -7,6 +7,17 @@ use App\Models\Song;
 
 class SongController extends Controller
 {
+    public function get(){
+        request()->validate([
+            'id' => 'required',
+        ]);
+        $song = Song::findOrFail(request('id'));
+        return response()->json([
+            'status' => 'successful',
+            'path' => $song->path
+        ]);
+    }
+
     public function upload()
     {
         request()->validate([

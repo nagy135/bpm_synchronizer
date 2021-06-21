@@ -26,3 +26,10 @@ Route::group([
     Route::get('', [SongController::class, 'get']);
     Route::post('upload', [SongController::class, 'upload']);
 });
+
+Route::group([
+    'prefix' => 'like'
+], function () {
+    Route::get('', [SongController::class, 'get']);
+    Route::post('', [SongController::class, 'create']);
+});

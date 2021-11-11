@@ -4,7 +4,7 @@ export interface IConfig {
 }
 
 const config: IConfig = {
-  service: 'market-service',
+  service: 'song-service',
   port: 7000,
 };
 

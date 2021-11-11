@@ -1,5 +1,5 @@
 import Logger from '@handler/logger/winston';
-Logger.log('coreInfo', 'Starting Wexo Gateway Api Application...');
+Logger.log('coreInfo', 'Starting Api-Gateway Application...');
 import createApplication from './app';
 
 // Generic logging

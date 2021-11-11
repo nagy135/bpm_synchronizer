@@ -1,6 +1,6 @@
 import { createConnection } from 'typeorm';
 import Logger from '@handler/logger/winston';
-Logger.log('coreInfo', 'Starting Wexo NFC Market service Api Application...');
+Logger.log('coreInfo', 'Starting Song-Market Application...');
 import createApplication from './app';
 
 // Generic logging

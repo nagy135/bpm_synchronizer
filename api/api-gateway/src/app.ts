@@ -11,8 +11,6 @@ import {
   MorganInfoMiddleware,
 } from '@middleware/morgan.middleware';
 
-import { socketInit } from '@services/socket';
-
 const onListening = (server: Net.Server): void => {
   if (server) {
     const addr: string | Net.AddressInfo = server.address() as
@@ -89,8 +87,6 @@ const createApplication = (): void => {
     const server: Net.Server = gatewayApi.listen(config.port);
     server.on('error', onHttpError);
     server.on('listening', () => onListening(server));
-    //todo pre socket bych spravil zvlast istanciu takze novy 'Express app'
-    socketInit(gatewayApi);
   } catch (error) {
     Logger.log('coreInfo', `Error when starting app: ${error.stack}`);
   }

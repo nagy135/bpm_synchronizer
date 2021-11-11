@@ -1,0 +1,17 @@
+FROM node:14.16.1-buster-slim
+
+ENV NODE_ENV=development
+# Install pm2 with Typescript
+RUN npm i -g pm2 && pm2 install typescript
+
+WORKDIR /home/node/app
+
+# BUILD SECTION
+COPY --chown=node:node package.json ecosystem.config.js yarn.lock tsconfig.json ./
+COPY --chown=node:node ./src ./src
+
+RUN yarn
+
+USER node
+
+CMD [ "pm2-runtime", "start", "ecosystem.config.js" ]

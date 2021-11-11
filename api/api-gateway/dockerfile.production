@@ -1,0 +1,51 @@
+###
+# Base stage
+# This is a shared stage for both production and build stage
+###
+FROM node:14.16.1-buster-slim as build
+
+WORKDIR /home/node/app
+
+# BUILD SECTION
+COPY package.json yarn.lock* ./
+
+# Install dependencies & clean cache
+RUN yarn
+
+# Copy our code
+COPY . .
+
+# And make build
+RUN yarn build
+
+##
+# Production stage
+##
+FROM node:14.16.1-buster-slim as production
+
+# Set environment variable
+ENV NODE_ENV production
+ENV TS_NODE_PROJECT tsconfig.run.json
+
+WORKDIR /home/node/app
+
+RUN chown -R node:node /home/node/app
+
+# Switch user to node
+USER node
+
+# Copy NPM package files
+COPY --from=build --chown=node:node /home/node/app/package.json  /home/node/app/yarn.lock* ./
+
+# Install dependencies & clean cache
+RUN yarn install --frozen-lockfile --production=true && yarn cache clean
+
+# Copy Code from build
+COPY --from=build --chown=node:node /home/node/app/build ./build
+
+# TS Config
+COPY --from=build --chown=node:node /home/node/app/tsconfig.json ./tsconfig.json
+COPY --from=build --chown=node:node /home/node/app/tsconfig.prod.json ./tsconfig.prod.json
+COPY --from=build --chown=node:node /home/node/app/tsconfig.run.json ./tsconfig.run.json
+
+CMD ["node", "-r", "tsconfig-paths/register", "build/index.js"]

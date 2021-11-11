@@ -1,0 +1,73 @@
+#!/bin/bash
+
+# requires bpm (from bpm-tools) uses sox
+#   requires (libao libid3tag libmad  opusfile twolame wavpack)
+# requires ffpmeg
+
+show_help(){
+    echo "Usage: bpm_synchronizer [options...]"
+    echo ""
+    echo "Options:"
+    echo "  -s|--song-path <path>     song on which conversion is performed"
+    echo "  -b|--bpm  <number>        target bpm we want song to have (default 120)"
+    echo "  -o|--output-dir <path>    directory where song will be generated into (default HOME)"
+}
+
+# $1 - target song
+get_bpm(){
+    sox $1 -t raw -r 44100 -e float -c 1 - | bpm 2> /dev/null
+}
+
+# $1 - song to convert
+# $2 - tempo in decimal
+change_speed(){
+    original_name=$(basename $1)
+    name="${original_name%.*}"
+    extension="${original_name##*.}"
+    ffmpeg \
+        -i $1 \
+        -filter:a "atempo=$2" \
+        "${OUTPUT_DIR}/${name}-${TARGET_BPM}.${extension}"
+}
+
+[ $# -eq 0 ] \
+    && show_help \
+    && exit 0
+
+# parse arguments
+TARGET_BPM=120
+SONG_PATH=""
+OUTPUT_DIR=""
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -b|--bpm)
+            shift
+            TARGET_BPM=$1
+            ;;
+        -s|--song-path)
+            shift
+            SONG_PATH=$1
+            ;;
+        -o|--output-dir)
+            shift
+            OUTPUT_DIR=$1
+            ;;
+    esac
+    shift
+done
+
+[ -z $SONG_PATH ] \
+    && echo "You have to provide path to song (-s)" \
+    && exit 1
+
+[ -z $OUTPUT_DIR ] \
+    && echo "No output dir provided, defaulting to $HOME" \
+    && OUTPUT_DIR=$HOME
+    
+
+re='^[0-9]+$'
+! [[ $TARGET_BPM =~ $re ]] && echo "Target bpm has to be number" && exit 2
+
+bpm=$(get_bpm $SONG_PATH)
+conversion=$(echo "scale=4;$TARGET_BPM/$bpm" | bc)
+change_speed $SONG_PATH $conversion

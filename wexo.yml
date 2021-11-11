@@ -1,0 +1,97 @@
+version: "3.7"
+services:
+  postgres:
+    image: postgres:13.1
+    volumes:
+      - wexo-nfc-market-postgres:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:3210:5432"
+    env_file: ./env/.env.postgres
+
+  redis:
+    image: redis:6.2.6-buster
+    volumes:
+      - wexo-nfc-market-redis:/data
+    tty: true
+
+  api-gateway:
+    build:
+      dockerfile: ./dockerfile.develop
+      context: ./api-gateway
+    env_file:
+      - ./env/.env.global
+      - ./env/.env.gateway
+    ports:
+      - "127.0.0.1:3200:7000"
+      - "127.0.0.1:3201:7300"
+    volumes:
+      - ./api-gateway/src:/home/node/app/src
+
+  market-service:
+    build:
+      dockerfile: ./dockerfile.develop
+      context: ./market-service
+    volumes:
+      - ./market-service/src:/home/node/app/src
+    env_file:
+      - ./env/.env.global
+      - ./env/.env.market-service
+
+  # email {{{
+
+  postgres-email-service:
+    image: postgres:13.1
+    env_file:
+      - ./env/.env.postgres-email-service
+    volumes:
+      - wexo-nfc-market-postgres-email-service:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:3212:5432"
+
+  email-service:
+    image: 01people/wexo-email-typescript-node:1.0.3
+    depends_on:
+      - postgres-email-service
+    env_file:
+      - ./env/.env.email-service
+    ports:
+      - "127.0.0.1:3213:7000"
+
+  email-service-job:
+    image: 01people/wexo-email-typescript-node-email-job:1.0.3
+    depends_on:
+      - postgres-email-service
+    env_file:
+      - ./env/.env.email-service
+
+  # }}}
+
+  # document {{{
+
+  postgres-document-service:
+    image: postgres:13.1
+    env_file:
+      - ./env/.env.postgres-document-service
+    volumes:
+      - wexo-nfc-market-postgres-document-service:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:3211:5432"
+
+  document-service:
+    image: 01people/wexo-document-typescript-node:2.0.0
+    depends_on:
+      - postgres-document-service
+    env_file:
+      - ./env/.env.document-service
+
+# }}}
+
+volumes:
+  wexo-nfc-market-postgres:
+    name: wexo-nfc-market-postgres
+  wexo-nfc-market-redis:
+    name: wexo-nfc-market-redis
+  wexo-nfc-market-postgres-email-service:
+    name: wexo-nfc-market-postgres-email-service
+  wexo-nfc-market-postgres-document-service:
+    name: wexo-nfc-market-postgres-document-service

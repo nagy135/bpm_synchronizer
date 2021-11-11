@@ -1,0 +1,34 @@
+services:
+  postgres-api-account-test:
+    image: 'postgres:13.1'
+    environment:
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+      - PGPORT=5432
+
+  account-service-test:
+    build:
+      context: ./
+      dockerfile: ./dockerfile.develop
+    depends_on:
+      - postgres-api-account-test
+    entrypoint: yarn test
+    environment:
+      - TYPEORM_HOST=postgres-api-account-test
+      - TYPEORM_PORT=5432
+      - TYPEORM_USERNAME=test
+      - TYPEORM_PASSWORD=test
+      - TYPEORM_DATABASE=test
+      - TYPEORM_CONNECTION=postgres
+      - TYPEORM_ENTITIES=src/data/entity/*.entity.ts
+      - TYPEORM_MIGRATIONS=src/data/migration/**/*.ts,tests/data/migration/**/*.ts
+      - TYPEORM_MIGRATIONS_DIR=src/data/migration
+      - TYPEORM_ENTITIES_DIR=src/data/entity
+      - TYPEORM_SYNCHRONIZE=false
+      - TYPEORM_LOGGING=false
+      - TYPEORM_SEEDING_SEEDS=tests/data/seeds/**/*.ts
+      - TYPEORM_SEEDING_FACTORIES=tests/data/factories/**/*.ts
+      - ONFIDO_API_TOKEN=token
+    volumes:
+      - ./src:/home/node/app/src
+      - ./tests:/home/node/app/tests

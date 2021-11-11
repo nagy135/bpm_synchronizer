@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "lib": ["es5", "es6", "dom"],
+    "sourceMap": true,
+    "outDir": "build",
+    "rootDirs": ["src/", "tests/"],
+    "strict": true,
+    "noImplicitAny": true,
+    "strictPropertyInitialization": false,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "baseUrl": "src",
+    "paths": {
+      "@command/*": ["command/*"],
+      "@handler/*": ["handler/*"],
+      "@controller/*": ["controller/*"],
+      "@entity/*": ["data/entity/*"],
+      "@requests/*": ["data/requests/*"],
+      "@ctypes/*": ["data/types/*"],
+      "@exception/*": ["exception/*"],
+      "@middleware/*": ["middleware/*"],
+      "@translations/*": ["translations/*"],
+      "@services/*": ["services/*"],
+      "@repository/*": ["data/repository/*"],
+      "@routes/*": ["routes/*"],
+      "@utils/*": ["utils/*"],
+      "@config/*": ["config/*"],
+      "@constants/*": ["data/constants/*"]
+    },
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "compileOnSave": true,
+  "exclude": ["node_modules"]
+}

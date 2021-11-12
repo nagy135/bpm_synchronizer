@@ -10,29 +10,16 @@ services:
     env_file: ./env/.env.postgres
 
   # BACKEND
-  api-gateway:
+  api:
     build:
       dockerfile: ./dockerfile.develop
-      context: ./api/api-gateway
+      context: ./api
     env_file:
-      - ./env/.env.global
-      - ./env/.env.gateway
+      - ./env/.env.api
     ports:
       - "127.0.0.1:3200:7000"
     volumes:
-      - ./api/api-gateway/src:/home/node/app/src
-
-  song-service:
-    build:
-      dockerfile: ./dockerfile.develop
-      context: ./api/song-service
-    volumes:
-      - ./api/song-service/src:/home/node/app/src
-    ports:
-      - "127.0.0.1:3201:7000"
-    env_file:
-      - ./env/.env.global
-      - ./env/.env.song-service
+      - ./api/src:/home/node/app/src
 
   # FRONTEND
   app:
@@ -49,6 +36,7 @@ services:
     stdin_open: true
     environment:
       - CHOKIDAR_USEPOLLING=true
+
 volumes:
   database:
     name: database

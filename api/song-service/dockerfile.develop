@@ -9,10 +9,15 @@ WORKDIR /home/node/app
 # BUILD SECTION
 COPY --chown=node:node package.json ecosystem.config.js yarn.lock tsconfig.json ./
 COPY --chown=node:node ./src ./src
-COPY --chown=node:node ./uploaded ./uploaded
 COPY --chown=node:node ./tests ./tests
 
+COPY --chown=node:node ./uploaded ./uploaded
+COPY --chown=node:node ./bpm_synchronizer ./bpm_synchronizer
+
 RUN yarn
+
+RUN apt-get update
+RUN apt-get install -y sox libsox-fmt-mp3 ffmpeg bc bpm-tools
 
 USER node
 

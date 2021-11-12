@@ -1,9 +1,9 @@
 import { Router } from 'express';
 
-const RouterV1: Router = Router();
+import SongRouter, { SONG_ROUTE_BASE_PATH } from './songs';
 
-RouterV1.all('/songs', (_req, res) => {
-  res.send('<p>hgahahah</p>');
-});
+const RouterV1 = Router();
+
+RouterV1.use(SONG_ROUTE_BASE_PATH, SongRouter);
 
 export default RouterV1;

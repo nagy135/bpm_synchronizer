@@ -9,6 +9,7 @@ WORKDIR /home/node/app
 # BUILD SECTION
 COPY --chown=node:node package.json ecosystem.config.js yarn.lock tsconfig.json ./
 COPY --chown=node:node ./src ./src
+COPY --chown=node:node ./uploaded ./uploaded
 COPY --chown=node:node ./tests ./tests
 
 RUN yarn

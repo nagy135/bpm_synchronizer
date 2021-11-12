@@ -28,6 +28,8 @@ services:
       context: ./api/song-service
     volumes:
       - ./api/song-service/src:/home/node/app/src
+    ports:
+      - "127.0.0.1:3201:7000"
     env_file:
       - ./env/.env.global
       - ./env/.env.song-service

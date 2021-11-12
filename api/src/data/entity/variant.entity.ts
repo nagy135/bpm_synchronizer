@@ -32,10 +32,7 @@ export default class VariantEntity extends BaseEntity {
 
   // relations
 
-  @ManyToOne(
-    () => SongEntity,
-    (song: SongEntity) => song.id
-  )
+  @ManyToOne(() => SongEntity, (song: SongEntity) => song.id)
   @JoinColumn({ name: 'song_id' })
   song: SongEntity;
 

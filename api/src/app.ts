@@ -76,15 +76,15 @@ const corsOptions: any = {
  */
 const createApplication = (): void => {
   try {
-    const gatewayApi: Application = Express();
-    gatewayApi.use(bodyParser.json());
-    gatewayApi.use(bodyParser.urlencoded({ extended: false }));
-    gatewayApi.use(MorganInfoMiddleware);
-    gatewayApi.use(MorganErrorMiddleware);
-    gatewayApi.use(cors(corsOptions));
-    gatewayApi.use('/v1', RouterV1);
-    gatewayApi.use(ErrorMiddleware);
-    const server: Net.Server = gatewayApi.listen(config.port);
+    const app: Application = Express();
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(MorganInfoMiddleware);
+    app.use(MorganErrorMiddleware);
+    app.use(cors(corsOptions));
+    app.use('/v1', RouterV1);
+    app.use(ErrorMiddleware);
+    const server: Net.Server = app.listen(config.port);
     server.on('error', onHttpError);
     server.on('listening', () => onListening(server));
   } catch (error) {

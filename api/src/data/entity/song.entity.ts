@@ -32,10 +32,7 @@ export default class SongEntity extends BaseEntity {
 
   // relations
 
-  @OneToMany(
-    () => VariantEntity,
-    (variant: VariantEntity) => variant.song
-  )
+  @OneToMany(() => VariantEntity, (variant: VariantEntity) => variant.song)
   variants: VariantEntity;
 
   // timestamps

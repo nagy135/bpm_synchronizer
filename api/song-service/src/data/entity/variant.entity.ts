@@ -6,18 +6,18 @@ import {
   DeleteDateColumn,
   Entity,
   PrimaryGeneratedColumn,
-  OneToMany,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
-
-import VariantEntity from './variant.entity';
+import SongEntity from './song.entity';
 
 /**
- * Entity representing stored song original
+ * Entity representing single item in auction
  *
  * @author Viktor Nagy <viktor.nagy@01people.com>
  */
-@Entity('songs')
-export default class SongEntity extends BaseEntity {
+@Entity('variants')
+export default class VariantEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -28,15 +28,16 @@ export default class SongEntity extends BaseEntity {
   path: string;
 
   @Column({ type: 'numeric' })
-  bpm: number; // original bpm
+  bpm: number;
 
   // relations
 
-  @OneToMany(
-    () => VariantEntity,
-    (variant: VariantEntity) => variant.song
+  @ManyToOne(
+    () => SongEntity,
+    (song: SongEntity) => song.id
   )
-  variants: VariantEntity;
+  @JoinColumn({ name: 'song_id' })
+  song: SongEntity;
 
   // timestamps
 
